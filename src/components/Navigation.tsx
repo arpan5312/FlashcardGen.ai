@@ -1,5 +1,6 @@
 import React from 'react';
-import { Upload, Library, Brain, FolderOpen, Search } from 'lucide-react';
+import { Upload, Library, Brain, FolderOpen, LogOut } from 'lucide-react';
+import { useAuth } from './context/AuthContext'; 
 
 interface NavigationProps {
   currentView: 'upload' | 'library' | 'review' | 'categories';
@@ -8,6 +9,8 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ currentView, onViewChange, reviewCount }) => {
+  const { logout } = useAuth();
+
   const navItems = [
     { id: 'upload', label: 'Upload', icon: Upload },
     { id: 'library', label: 'Library', icon: Library },
@@ -19,16 +22,18 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, onViewChange, revi
     <nav className="bg-white shadow-sm border-b border-gray-200">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          {/* Left Branding */}
           <div className="flex items-center space-x-3">
             <Brain className="h-8 w-8 text-blue-500" />
             <h1 className="text-xl font-bold text-gray-900">FlashcardGen</h1>
           </div>
-          
+
+          {/* Center Nav Items */}
           <div className="flex items-center space-x-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentView === item.id;
-              
+
               return (
                 <button
                   key={item.id}
@@ -50,10 +55,21 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, onViewChange, revi
               );
             })}
           </div>
+
+          {/* Right Logout Button */}
+          <div>
+            <button
+              onClick={logout}
+              className="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg text-red-600 hover:bg-red-100 transition"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </div>
     </nav>
   );
 };
 
-export default Navigation
+export default Navigation;
